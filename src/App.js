@@ -4,9 +4,12 @@ import "./App.css";
 
 function App() {
   return (
-    <Container maxWidth="lg">
-      <Poem1 />
-    </Container>
+    <>
+      <div className="bg-img"></div>
+      <Container maxWidth="lg">
+        <Poem1 />
+      </Container>
+    </>
   );
 }
 
