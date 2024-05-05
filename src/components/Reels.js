@@ -7,8 +7,8 @@ import fourthVideo from "../videos/4.mp4";
 import fifthVideo from "../videos/5.mp4";
 import sixthVideo from "../videos/6.mp4";
 import sevethVideo from "../videos/7.mp4";
-import eighthVideo from "../videos/8.mp4";
-function Reel({ videourl, id, handleFinish, active }) {
+// import eighthVideo from "../videos/8.mp4";
+function Reel({ videourl, id, handleFinish, active, handleSpeech }) {
   const videoRef = useRef(null);
   const [playbackStarted, setPlaybackStarted] = useState(false);
 
@@ -18,7 +18,6 @@ function Reel({ videourl, id, handleFinish, active }) {
         .play()
         .then(() => {
           setPlaybackStarted(true);
-          videoRef.current.fullScreen()
         })
         .catch((error) => {
           console.error("Failed to start video playback:", error);
@@ -32,9 +31,9 @@ function Reel({ videourl, id, handleFinish, active }) {
         videoRef.current.click();
         videoRef.current.play();
       }
-    } catch (error) {
-      
-    }
+       handleSpeech();
+    } catch (error) {}
+   
   }, [videoRef.current, active]);
   return (
     active && (
@@ -69,25 +68,59 @@ export default function Reels() {
     // { name: "8", url: eighthVideo },
   ];
   const [currentIndex, setCurrentIndex] = useState(0);
+  const recognition = useRef(null);
+  useEffect(() => {
+    if ("SpeechRecognition" in window || "webkitSpeechRecognition" in window) {
+      recognition.current = new (window.SpeechRecognition ||
+        window.webkitSpeechRecognition)();
+
+      recognition.current.lang = "en-US"; // Set language
+
+      recognition.current.onstart = function () {
+        console.log("Listening...");
+        // transcriptDiv.innerHTML = "Listening...";
+      };
+
+      recognition.current.onresult = function (event) {
+        const transcript = event.results[0][0].transcript;
+        console.log(`You said: ${transcript}`, event);
+        if((transcript).toLowerCase().includes("next")){
+          handleOnFinish(setCurrentIndex);
+        }
+      };
+
+      recognition.current.onerror = function (event) {
+        const _error = "Error occurred: " + event.error;
+        console.log(_error, "::: recognition.error :::");
+
+      };
+    } else {
+      console.log("Speech recognition is not supported in your browser.")
+    }
+  }, []);
+  const handleOnFinish = (setCurrentIndex) => {
+    if (videos.length >= 0 && currentIndex < videos.length - 1) {
+      setCurrentIndex((ps) => ps + 1);
+    } else {
+      setCurrentIndex(0);
+    }
+  };
   return (
     <div className="video-wrapper">
       {/* <button className="video-prev">PREV</button> */}
       {videos.map((_vid, idx) => (
         <Reel
+          handleSpeech={() => recognition.current.start()}
           active={currentIndex === idx}
           key={idx}
           videourl={_vid.url}
           id={"videos_id_" + idx}
-          handleFinish={() => {
-            if (videos.length >= 0 && currentIndex < videos.length - 1) {
-              setCurrentIndex((ps) => ps + 1);
-            } else {
-              setCurrentIndex(0);
-            }
-          }}
+          handleFinish={() => handleOnFinish(setCurrentIndex)}
         />
       ))}
-      {currentIndex === videos.length && <button className="reload-btn">Reload</button>}
+      {currentIndex === videos.length && (
+        <button className="reload-btn">Reload</button>
+      )}
     </div>
   );
 }
