@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import firstVideo from "../videos/1.mp4";
 import secondVideo from "../videos/2.mp4";
 import thirdVideo from "../videos/3.mp4";
@@ -29,11 +29,10 @@ function Reel({ videourl, id, handleFinish, active, handleSpeech }) {
     try {
       if (videoRef.current && active) {
         videoRef.current.click();
-        videoRef.current.play();
+        // videoRef.current.play();
+        handleSpeech();
       }
-       handleSpeech();
     } catch (error) {}
-   
   }, [videoRef.current, active]);
   return (
     active && (
@@ -41,6 +40,7 @@ function Reel({ videourl, id, handleFinish, active, handleSpeech }) {
         <video
           className="video-reel"
           id={id}
+          autoPlay={true}
           // controls={true}
           ref={videoRef}
           onClick={handleVideoClick}
@@ -69,45 +69,52 @@ export default function Reels() {
   ];
   const [currentIndex, setCurrentIndex] = useState(0);
   const recognition = useRef(null);
-  useEffect(() => {
-    if ("SpeechRecognition" in window || "webkitSpeechRecognition" in window) {
-      recognition.current = new (window.SpeechRecognition ||
-        window.webkitSpeechRecognition)();
-
-      recognition.current.lang = "en-US"; // Set language
-
-      recognition.current.onstart = function () {
-        console.log("Listening...");
-        // transcriptDiv.innerHTML = "Listening...";
-      };
-
-      recognition.current.onresult = function (event) {
-        const transcript = event.results[0][0].transcript;
-        console.log(`You said: ${transcript}`, event);
-        if((transcript).toLowerCase().includes("next")){
-          handleOnFinish(setCurrentIndex);
-        }
-      };
-
-      recognition.current.onerror = function (event) {
-        const _error = "Error occurred: " + event.error;
-        console.log(_error, "::: recognition.error :::");
-
-      };
-    } else {
-      console.log("Speech recognition is not supported in your browser.")
-    }
-  }, []);
-  const handleOnFinish = (setCurrentIndex) => {
-    if (videos.length >= 0 && currentIndex < videos.length - 1) {
-      setCurrentIndex((ps) => ps + 1);
-    } else {
-      setCurrentIndex(0);
-    }
+  const handleSpeechRecognition = () => {
+    try {
+      if (
+        "SpeechRecognition" in window ||
+        "webkitSpeechRecognition" in window
+      ) {
+        recognition.current = new (window.SpeechRecognition ||
+          window.webkitSpeechRecognition)();
+        recognition.current.lang = "en-US"; // Set language
+        recognition.current.onstart = function () {
+          console.log("Listening...");
+        };
+        recognition.current.onresult = function (event) {
+          const transcript = event.results[0][0].transcript;
+          console.log(`You said: ${transcript}`, event);
+          if (transcript.toLowerCase().includes("next")) {
+            handleOnFinish();
+          }
+        };
+        recognition.current.onerror = function (event) {
+          const _error = "Error occurred: " + event.error;
+          console.log(_error, "::: recognition.error :::");
+        };
+      } else {
+        console.log("Speech recognition is not supported in your browser.");
+      }
+    } catch (error) {}
   };
+  useEffect(() => {
+    handleSpeechRecognition();
+    return () => {
+      recognition.current.stop();
+    };
+  }, []);
+  const handleOnFinish = () => {
+    setCurrentIndex((ps) => {
+      if (videos.length >= 0 && ps < videos.length - 1) {
+        ps = ps + 1;
+      } else {
+        ps = 0;
+      }
+      return ps
+    });
+  }
   return (
     <div className="video-wrapper">
-      {/* <button className="video-prev">PREV</button> */}
       {videos.map((_vid, idx) => (
         <Reel
           handleSpeech={() => recognition.current.start()}
@@ -115,7 +122,7 @@ export default function Reels() {
           key={idx}
           videourl={_vid.url}
           id={"videos_id_" + idx}
-          handleFinish={() => handleOnFinish(setCurrentIndex)}
+          handleFinish={() => handleOnFinish()}
         />
       ))}
       {currentIndex === videos.length && (
