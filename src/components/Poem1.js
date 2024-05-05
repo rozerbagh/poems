@@ -15,7 +15,7 @@ function Poem1() {
       >
         <Grid item xs={12}>
           <Typography variant="h3" gutterBottom color={"blueviolet"}>
-            LIFE's TRUE INITIMACY !
+            LIFE's TRUE INITIMACY.
           </Typography>
         </Grid>
         <Grid item xs={12}>
