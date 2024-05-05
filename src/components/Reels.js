@@ -18,6 +18,7 @@ function Reel({ videourl, id, handleFinish, active }) {
         .play()
         .then(() => {
           setPlaybackStarted(true);
+          videoRef.current.fullScreen()
         })
         .catch((error) => {
           console.error("Failed to start video playback:", error);
@@ -65,7 +66,7 @@ export default function Reels() {
     { name: "5", url: fifthVideo },
     { name: "6", url: sixthVideo },
     { name: "7", url: sevethVideo },
-    { name: "8", url: eighthVideo },
+    // { name: "8", url: eighthVideo },
   ];
   const [currentIndex, setCurrentIndex] = useState(0);
   return (
