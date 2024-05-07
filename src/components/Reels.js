@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import firstVideo from "../videos/1.mp4";
 import secondVideo from "../videos/2.mp4";
 import thirdVideo from "../videos/3.mp4";
@@ -8,6 +8,8 @@ import fifthVideo from "../videos/5.mp4";
 import sixthVideo from "../videos/6.mp4";
 import sevethVideo from "../videos/7.mp4";
 // import eighthVideo from "../videos/8.mp4";
+import ninthVideo from "../videos/9.mp4";
+import tenthVideo from "../videos/10.mp4";
 function Reel({ videourl, id, handleFinish, active, handleSpeech }) {
   const videoRef = useRef(null);
   const [playbackStarted, setPlaybackStarted] = useState(false);
@@ -58,13 +60,16 @@ function Reel({ videourl, id, handleFinish, active, handleSpeech }) {
 
 export default function Reels() {
   const videos = [
-    { name: "1", url: firstVideo },
-    { name: "2", url: secondVideo },
-    { name: "3", url: thirdVideo },
+    { name: "9", url: ninthVideo },
     { name: "4", url: fourthVideo },
     { name: "5", url: fifthVideo },
+    { name: "5", url: fifthVideo },
+    { name: "2", url: secondVideo },
+    { name: "3", url: thirdVideo },
     { name: "6", url: sixthVideo },
-    { name: "7", url: sevethVideo },
+    { name: "1", url: firstVideo },
+    // { name: "7", url: sevethVideo },
+    // { name: "10", url: tenthVideo },
     // { name: "8", url: eighthVideo },
   ];
   const [currentIndex, setCurrentIndex] = useState(0);
