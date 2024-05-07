@@ -6,10 +6,10 @@ import thirdVideo from "../videos/3.mp4";
 import fourthVideo from "../videos/4.mp4";
 import fifthVideo from "../videos/5.mp4";
 import sixthVideo from "../videos/6.mp4";
-import sevethVideo from "../videos/7.mp4";
+// import sevethVideo from "../videos/7.mp4";
 // import eighthVideo from "../videos/8.mp4";
 import ninthVideo from "../videos/9.mp4";
-import tenthVideo from "../videos/10.mp4";
+// import tenthVideo from "../videos/10.mp4";
 function Reel({ videourl, id, handleFinish, active, handleSpeech }) {
   const videoRef = useRef(null);
   const [playbackStarted, setPlaybackStarted] = useState(false);
