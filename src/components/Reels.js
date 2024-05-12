@@ -6,10 +6,13 @@ import thirdVideo from "../videos/3.mp4";
 import fourthVideo from "../videos/4.mp4";
 import fifthVideo from "../videos/5.mp4";
 import sixthVideo from "../videos/6.mp4";
-// import sevethVideo from "../videos/7.mp4";
-// import eighthVideo from "../videos/8.mp4";
+import sevethVideo from "../videos/7.mp4";
+import eighthVideo from "../videos/8.mp4";
 import ninthVideo from "../videos/9.mp4";
-// import tenthVideo from "../videos/10.mp4";
+import tenthVideo from "../videos/10.mp4";
+import eleventhVideo from "../videos/11.mp4";
+import twelvethVideo from "../videos/12.mp4";
+import thirteenthVideo from "../videos/13.mp4";
 function Reel({ videourl, id, handleFinish, active, handleSpeech }) {
   const videoRef = useRef(null);
   const [playbackStarted, setPlaybackStarted] = useState(false);
@@ -68,9 +71,12 @@ export default function Reels() {
     { name: "3", url: thirdVideo },
     { name: "6", url: sixthVideo },
     { name: "1", url: firstVideo },
-    // { name: "7", url: sevethVideo },
+    { name: "7", url: sevethVideo },
+    { name: "13", url: thirteenthVideo },
+    // { name: "11", url: eleventhVideo },
     // { name: "10", url: tenthVideo },
     // { name: "8", url: eighthVideo },
+    // { name: "12", url: twelvethVideo },
   ];
   const [currentIndex, setCurrentIndex] = useState(0);
   const recognition = useRef(null);
@@ -90,7 +96,7 @@ export default function Reels() {
           const transcript = event.results[0][0].transcript;
           console.log(`You said: ${transcript}`, event);
           if (transcript.toLowerCase().includes("next")) {
-            handleOnFinish();
+            // handleOnFinish();
           }
         };
         recognition.current.onerror = function (event) {
