@@ -2,7 +2,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import firstVideo from "../videos/1.mp4";
 import secondVideo from "../videos/2.mp4";
-import thirdVideo from "../videos/3.mp4";
+// import thirdVideo from "../videos/3.mp4";
 import fourthVideo from "../videos/4.mp4";
 import fifthVideo from "../videos/5.mp4";
 import sixthVideo from "../videos/6.mp4";
