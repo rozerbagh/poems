@@ -13,7 +13,13 @@ import ninthVideo from "../videos/9.mp4";
 // import eleventhVideo from "../videos/11.mp4";
 // import twelvethVideo from "../videos/12.mp4";
 import thirteenthVideo from "../videos/13.mp4";
-function Reel({ videourl, id, handleFinish, active, handleSpeech }) {
+function Reel({
+  videourl,
+  id,
+  handleFinish,
+  active,
+  // handleSpeech
+}) {
   const videoRef = useRef(null);
   const [playbackStarted, setPlaybackStarted] = useState(false);
 
@@ -35,7 +41,7 @@ function Reel({ videourl, id, handleFinish, active, handleSpeech }) {
       if (videoRef.current && active) {
         videoRef.current.click();
         // videoRef.current.play();
-        handleSpeech();
+        // handleSpeech();
       }
     } catch (error) {}
   }, [videoRef.current, active]);
@@ -121,14 +127,14 @@ export default function Reels() {
       } else {
         ps = 0;
       }
-      return ps
+      return ps;
     });
-  }
+  };
   return (
     <div className="video-wrapper">
       {videos.map((_vid, idx) => (
         <Reel
-          handleSpeech={() => recognition.current.start()}
+          // handleSpeech={() => recognition.current.start()}
           active={currentIndex === idx}
           key={idx}
           videourl={_vid.url}
